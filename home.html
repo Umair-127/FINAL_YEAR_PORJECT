@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URBANease | Professional Home Services</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #f59e0b;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --text-gray: #64748b;
+            --white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--white); color: var(--dark); line-height: 1.6; padding-top: 70px; }
+
+        /* --- Navbar --- */
+        .navbar {
+            background-color: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 5%;
+            position: fixed;
+            top: 0; width: 100%; z-index: 1000;
+            transition: 0.4s;
+        }
+        .navbar.scrolled { padding: 0.5rem 5%; background: #000; }
+        .logo { color: var(--white); font-size: 1.5rem; font-weight: 700; }
+        .logo span { color: var(--secondary); }
+
+        .search-box {
+            display: flex;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 5px 15px;
+            flex-grow: 0.4;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .search-box input { background: transparent; border: none; color: white; padding: 8px; width: 100%; outline: none; }
+
+        .nav-links { list-style: none; display: flex; gap: 1.5rem; }
+        .nav-links a { color: #cbd5e1; text-decoration: none; font-weight: 500; transition: 0.3s; }
+        .nav-links a:hover { color: var(--secondary); }
+
+        /* --- Hero --- */
+        .hero { position: relative; height: 60vh; width: 100%; overflow: hidden; display: flex; justify-content: center; align-items: center; text-align: center; color: white; }
+        .hero-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
+        .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); z-index: -1; }
+        .btn { padding: 0.9rem 2.2rem; border-radius: 8px; text-decoration: none; font-weight: 600; transition: 0.3s; display: inline-block; cursor: pointer; border: none; }
+        .btn-primary { background-color: var(--secondary); color: var(--dark); }
+
+        /* --- Services --- */
+        .services { padding: 60px 10%; background-color: var(--light); }
+        .service-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .service-card { background: var(--white); border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); transition: 0.4s; }
+        
+        /* OPTIMIZED IMAGE CSS */
+        .service-card img { 
+            width: 100%; 
+            height: 280px; 
+            object-fit: cover; 
+            object-position: top; 
+            transition: 0.5s ease;
+        }
+        .service-card:hover img { transform: scale(1.05); }
+
+        .card-content { padding: 20px; }
+        .btn-view { display: block; text-align: center; padding: 10px; border: 2px solid var(--primary); color: var(--primary); text-decoration: none; border-radius: 8px; font-weight: 600; transition: 0.3s; cursor: pointer; }
+        .btn-view:hover { background: var(--primary); color: white; }
+
+        /* --- Why Choose Us --- */
+        .why-choose-us { padding: 80px 10%; text-align: center; background: var(--white); }
+        .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-top: 40px; }
+        .why-item span { font-size: 3rem; display: block; margin-bottom: 10px; }
+
+        /* --- Modal --- */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 2000; }
+        .modal-content { background: white; padding: 30px; border-radius: 20px; max-width: 500px; width: 90%; position: relative; text-align: center; }
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; }
+
+        /* --- Footer --- */
+        footer { background: var(--dark); color: #cbd5e1; padding: 60px 10% 20px; }
+        .footer-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; text-align: left; }
+        .footer-bottom { text-align: center; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 40px; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar" id="mainNav">
+        <div class="logo">URBAN<span>ease</span></div>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search for a service...">
+        </div>
+        <ul class="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </nav>
+
+    <header class="hero">
+        <video autoplay muted loop playsinline class="hero-video">
+            <source src="video.mp4" type="video/mp4">
+        </video>
+        <div class="overlay"></div>
+        <div class="hero-content">
+            <h1>Expert Home Care,<br>One Tap Away.</h1>
+            <button class="btn btn-primary" onclick="document.getElementById('services').scrollIntoView()">Book a Service</button>
+        </div>
+    </header>
+
+    <section class="services" id="services">
+        <h2 style="text-align:center; margin-bottom: 40px;">Our Top Services</h2>
+        <div class="service-grid" id="serviceGrid">
+            <div class="service-card" data-name="plumbing plumber">
+                <img src="PLUMBER.jpg" alt="Plumbing">
+                <div class="card-content">
+                    <h3>Master Plumbing</h3>
+                    <div style="display:flex; justify-content:space-between; margin: 10px 0;">
+                        <span>⭐ 4.8</span><strong>$49</strong>
+                    </div>
+                    <button class="btn-view" onclick="openModal('Master Plumbing', 'Professional leak repair, pipe fitting, and bathroom installations by certified plumbers.')">View Details</button>
+                </div>
+            </div>
+            <div class="service-card" data-name="electrical electrician">
+                <img src="ELECT.jpg" alt="Electrical">
+                <div class="card-content">
+                    <h3>Electrical Experts</h3>
+                    <div style="display:flex; justify-content:space-between; margin: 10px 0;">
+                        <span>⭐ 4.9</span><strong>$59</strong>
+                    </div>
+                    <button class="btn-view" onclick="openModal('Electrical Experts', 'Expert wiring, appliance repair, and circuit troubleshooting with safety guarantee.')">View Details</button>
+                </div>
+            </div>
+            <div class="service-card" data-name="cleaning maid">
+                <img src="CLEAN.jpg" alt="Cleaning">
+                <div class="card-content">
+                    <h3>Deep Cleaning</h3>
+                    <div style="display:flex; justify-content:space-between; margin: 10px 0;">
+                        <span>⭐ 4.7</span><strong>$79</strong>
+                    </div>
+                    <button class="btn-view" onclick="openModal('Deep Cleaning', 'Eco-friendly full-house sanitization. Includes kitchen, bathroom, and balcony cleaning.')">View Details</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="why-choose-us">
+        <h2>Why Choose URBANease?</h2>
+        <div class="why-grid">
+            <div class="why-item"><span>🛡️</span><h3>Verified Pros</h3><p>Every pro is background checked.</p></div>
+            <div class="why-item"><span>💳</span><h3>Upfront Pricing</h3><p>Pay exactly what you see.</p></div>
+            <div class="why-item"><span>✨</span><h3>30-Day Guarantee</h3><p>Satisfaction or we redo it for free.</p></div>
+        </div>
+    </section>
+
+    <div class="modal" id="serviceModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle"></h2>
+            <p id="modalDescription" style="margin: 20px 0; color: var(--text-gray);"></p>
+            <button class="btn btn-primary" onclick="confirmBooking()">Book This Service</button>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col"><div class="logo">URBAN<span>ease</span></div><p>Quality home care delivered.</p></div>
+            <div class="footer-col"><h4>Quick Links</h4><ul><li><a href="#">Join as Partner</a></li><li><a href="#">About Us</a></li></ul></div>
+            <div class="footer-col"><h4>Contact</h4><p>support@urbanease.com<br>+1 234 567 890</p></div>
+        </div>
+        <div class="footer-bottom"><p>&copy; 2026 URBANease</p></div>
+    </footer>
+
+    <script>
+        // Sticky Nav
+        window.onscroll = function() {
+            const nav = document.getElementById('mainNav');
+            if (window.pageYOffset > 50) nav.classList.add('scrolled');
+            else nav.classList.remove('scrolled');
+        };
+
+        // Live Search
+        document.getElementById('searchInput').addEventListener('keyup', (e) => {
+            const term = e.target.value.toLowerCase();
+            document.querySelectorAll('.service-card').forEach(card => {
+                const name = card.getAttribute('data-name').toLowerCase();
+                card.style.display = name.includes(term) ? "block" : "none";
+            });
+        });
+
+        // Modal Logic
+        function openModal(title, desc) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalDescription').innerText = desc;
+            document.getElementById('serviceModal').style.display = 'flex';
+        }
+        function closeModal() { document.getElementById('serviceModal').style.display = 'none'; }
+        function confirmBooking() {
+            alert("✅ Booking Success! We will contact you shortly.");
+            closeModal();
+        }
+    </script>
+</body>
+</html>

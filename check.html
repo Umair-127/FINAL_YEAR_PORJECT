@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URBANease | Professional Home Services</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #f59e0b;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --text-gray: #64748b;
+            --white: #ffffff;
+            --border: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            /* Times New Roman for body text */
+            font-family: "Times New Roman", Times, serif; 
+            background-color: var(--white);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        /* Noto Serif for headings */
+        h1, h2, h3, h4, .logo, .nav-links a, .cart-header h3, .modal-title {
+            font-family: 'Noto Serif', serif;
+        }
+
+        /* --- Navbar --- */
+        .navbar {
+            background-color: transparent;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 5%;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid transparent;
+        }
+
+        .navbar.scrolled {
+            background-color: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 0.8rem 5%;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo { color: var(--white); font-size: 1.5rem; font-weight: 700; }
+        .logo span { color: var(--secondary); }
+
+        .search-box {
+            display: flex;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 5px 15px;
+            margin: 0 20px;
+            flex-grow: 0.4;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+        }
+
+        .search-box input {
+            background: transparent; border: none; color: white;
+            padding: 8px; width: 100%; outline: none; font-family: inherit;
+        }
+        
+        .search-box input::placeholder { color: rgba(255, 255, 255, 0.8); }
+
+        .nav-links { list-style: none; display: flex; gap: 1.5rem; align-items: center; }
+        .nav-links a { color: #cbd5e1; text-decoration: none; font-weight: 700; transition: 0.3s; cursor: pointer; }
+        .nav-links a:hover { color: var(--secondary); }
+
+        /* --- Login / Signup Nav Buttons --- */
+        .nav-divider {
+            width: 1px;
+            height: 20px;
+            background-color: rgba(255, 255, 255, 0.3);
+            margin: 0 5px;
+        }
+
+        .nav-btn-login {
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            padding: 6px 16px;
+            border-radius: 6px;
+        }
+        
+        .nav-btn-login:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--white);
+            color: var(--white) !important;
+        }
+
+        .nav-btn-signup {
+            background: var(--secondary);
+            color: var(--dark) !important;
+            padding: 6px 18px;
+            border-radius: 6px;
+            border: 1px solid var(--secondary);
+        }
+        
+        .nav-btn-signup:hover {
+            background: #d97706; 
+            border-color: #d97706;
+        }
+
+        /* Cart Badge in Navbar */
+        .cart-icon-container { position: relative; display: flex; align-items: center; }
+        .cart-badge {
+            background: var(--secondary);
+            color: var(--white);
+            font-size: 0.75rem;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            border-radius: 50%;
+            padding: 2px 6px;
+            margin-left: 5px;
+        }
+
+        /* --- Hero Section --- */
+        .hero { position: relative; height: 70vh; width: 100%; overflow: hidden; display: flex; justify-content: center; align-items: center; text-align: center; color: white; }
+        .hero-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
+        .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.5); z-index: -1; }
+        .hero-content { z-index: 1; position: relative; padding-top: 60px; }
+        .hero h1 { font-size: 3.5rem; margin-bottom: 20px; line-height: 1.2; }
+
+        .btn { padding: 0.9rem 2.2rem; border-radius: 8px; text-decoration: none; font-weight: 600; transition: 0.3s; display: inline-block; font-family: 'Noto Serif', serif; cursor: pointer; border: none; }
+        .btn-primary { background-color: var(--secondary); color: var(--dark); }
+        .btn-primary:hover { background-color: #d97706; }
+        .btn-secondary { background-color: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255, 255, 255, 0.3); backdrop-filter: blur(5px); }
+        .btn-secondary:hover { background-color: rgba(255, 255, 255, 0.2); }
+
+        /* --- Sections Shared Styles --- */
+        .section-header { text-align: center; margin-bottom: 40px; }
+        .section-header h2 { font-size: 2.2rem; color: var(--dark); }
+        .section-header p { color: var(--text-gray); font-size: 1.1rem; }
+
+        /* --- Services --- */
+        .services { padding: 80px 10%; background-color: var(--light); }
+        .service-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .service-card { background: var(--white); border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); transition: 0.4s; border: 1px solid var(--border); }
+        .service-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1); }
+        .service-card img { width: 100%; height: 200px; object-fit: cover; background: #cbd5e1; }
+        .card-content { padding: 20px; }
+        .btn-view { display: block; text-align: center; padding: 10px; border: 2px solid var(--primary); color: var(--primary); text-decoration: none; border-radius: 8px; font-weight: bold; transition: 0.3s; font-family: 'Noto Serif', serif; }
+        .btn-view:hover { background: var(--primary); color: white; }
+
+        /* --- Most Booked Services --- */
+        .most-booked { padding: 60px 10%; background-color: var(--white); }
+        .horizontal-scroll { display: flex; gap: 20px; overflow-x: auto; padding: 20px 0; scrollbar-width: none; }
+        .horizontal-scroll::-webkit-scrollbar { display: none; }
+        .mini-card { min-width: 260px; background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); display: flex; flex-direction: column; }
+        .mini-img-placeholder { height: 130px; background: linear-gradient(135deg, #f1f5f9, #e2e8f0); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 3rem; margin-bottom: 15px; }
+        .mini-rating { font-size: 0.85rem; color: #10b981; font-weight: bold; font-family: Arial, sans-serif; }
+        .mini-card h4 { font-size: 1.1rem; margin: 5px 0 15px; }
+        .price-row { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
+        .price { font-weight: bold; font-size: 1.1rem; color: var(--dark); }
+        
+        .add-btn { background: var(--white); color: var(--primary); border: 1px solid var(--primary); padding: 6px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .add-btn:hover { background: var(--primary); color: var(--white); }
+
+        /* --- Cart Sidebar UI --- */
+        .cart-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5); z-index: 1001;
+            visibility: hidden; opacity: 0; transition: 0.3s ease;
+        }
+        .cart-overlay.active { visibility: visible; opacity: 1; }
+
+        .cart-sidebar {
+            position: fixed; top: 0; right: -400px; width: 100%; max-width: 400px; height: 100vh;
+            background: var(--white); z-index: 1002; transition: 0.3s ease;
+            display: flex; flex-direction: column; box-shadow: -5px 0 25px rgba(0,0,0,0.1);
+        }
+        .cart-sidebar.active { right: 0; }
+
+        .cart-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .close-cart { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-gray); transition: 0.2s; }
+        .close-cart:hover { color: var(--dark); }
+
+        .cart-items-container { padding: 20px; flex-grow: 1; overflow-y: auto; }
+        .cart-empty { text-align: center; color: var(--text-gray); margin-top: 50px; font-style: italic; }
+        
+        .cart-item { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 15px; }
+        .cart-item-info h4 { font-size: 1rem; margin-bottom: 5px; }
+        .cart-item-price { font-weight: bold; color: var(--primary); font-family: Arial, sans-serif; }
+        .remove-btn { background: #fee2e2; color: #ef4444; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: bold; }
+        .remove-btn:hover { background: #fecaca; }
+
+        .cart-footer { padding: 20px; background: var(--light); border-top: 1px solid var(--border); }
+        .cart-total { display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: bold; margin-bottom: 15px; font-family: Arial, sans-serif; }
+        
+        /* --- Why Choose Us & How It Works --- */
+        .why-choose-us { padding: 80px 10%; text-align: center; background: var(--light); }
+        .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-top: 50px; }
+        .why-item span { font-size: 3.5rem; display: block; margin-bottom: 15px; }
+        .why-item h3 { margin-bottom: 10px; font-size: 1.4rem; }
+        .why-item p { color: var(--text-gray); }
+
+        .how-it-works { padding: 80px 10%; background: var(--white); text-align: center; }
+        .how-grid { display: flex; justify-content: center; flex-wrap: wrap; gap: 30px; margin-top: 40px; }
+        .step-card { background: var(--light); padding: 30px 20px; border-radius: 12px; width: 280px; border: 1px solid var(--border); }
+        .step-number { background: var(--primary); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: bold; margin: 0 auto 15px; font-family: 'Noto Serif', serif; }
+
+        /* --- MODAL UI (Login / Signup) --- */
+        .auth-modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px);
+            z-index: 2000; display: flex; justify-content: center; align-items: center;
+            visibility: hidden; opacity: 0; transition: 0.3s ease;
+        }
+        
+        .auth-modal-overlay.active {
+            visibility: visible; opacity: 1;
+        }
+
+        .auth-modal {
+            background: var(--white); width: 100%; max-width: 450px;
+            border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            padding: 40px; position: relative;
+            transform: translateY(20px); transition: 0.3s ease;
+        }
+
+        .auth-modal-overlay.active .auth-modal {
+            transform: translateY(0);
+        }
+
+        .close-modal-btn {
+            position: absolute; top: 20px; right: 20px;
+            background: none; border: none; font-size: 1.5rem;
+            color: var(--text-gray); cursor: pointer; transition: 0.2s;
+        }
+        .close-modal-btn:hover { color: var(--dark); }
+
+        .modal-title { font-size: 2rem; color: var(--dark); margin-bottom: 5px; text-align: center; }
+        .modal-subtitle { color: var(--text-gray); text-align: center; margin-bottom: 30px; }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: bold; color: var(--dark); font-size: 0.95rem; }
+        .form-group input {
+            width: 100%; padding: 12px 15px; border: 1px solid var(--border);
+            border-radius: 8px; font-size: 1rem; font-family: inherit;
+            outline: none; transition: 0.2s; background: var(--light);
+        }
+        .form-group input:focus {
+            border-color: var(--primary); background: var(--white);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .forgot-password {
+            display: block; text-align: right; font-size: 0.9rem;
+            color: var(--primary); margin-top: -10px; margin-bottom: 20px;
+            text-decoration: none; font-weight: bold;
+        }
+        .forgot-password:hover { text-decoration: underline; }
+
+        .auth-submit-btn {
+            width: 100%; padding: 14px; background: var(--primary);
+            color: white; border: none; border-radius: 8px; font-size: 1.1rem;
+            font-weight: bold; cursor: pointer; transition: 0.3s;
+            font-family: 'Noto Serif', serif;
+        }
+        .auth-submit-btn:hover { background: var(--primary-dark); }
+
+        .auth-switch {
+            text-align: center; margin-top: 25px; font-size: 0.95rem; color: var(--text-gray);
+        }
+        .auth-switch a {
+            color: var(--primary); font-weight: bold; text-decoration: none; cursor: pointer;
+        }
+        .auth-switch a:hover { text-decoration: underline; }
+
+        /* --- Footer --- */
+        footer { background: var(--dark); color: #cbd5e1; padding: 60px 10% 20px; }
+        .footer-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; }
+        .footer-bottom { text-align: center; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1); margin-top: 40px; }
+        ul { list-style: none; }
+        footer a { color: #cbd5e1; text-decoration: none; }
+        footer a:hover { color: var(--secondary); }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar" id="navbar">
+        <div class="logo">URBAN<span>ease</span></div>
+        <form class="search-box">
+            <input type="text" placeholder="What are you looking for?">
+            <button type="submit" style="background:none; border:none; cursor:pointer; color:white;">🔍</button>
+        </form>
+        <ul class="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Services</a></li>
+            <li>
+                <a class="cart-icon-container" id="open-cart-btn">
+                    🛒 Cart <span class="cart-badge" id="cart-badge">0</span>
+                </a>
+            </li>
+            
+            <li class="nav-divider"></li>
+            <li><a class="nav-btn-login" id="nav-login-btn">Login</a></li>
+            <li><a class="nav-btn-signup" id="nav-signup-btn">Sign Up</a></li>
+            
+        </ul>
+    </nav>
+
+    <header class="hero">
+        <video autoplay muted loop playsinline class="hero-video">
+            <source src="video.mp4" type="video/mp4">
+        </video>
+        <div class="overlay"></div>
+        <div class="hero-content">
+            <h1>Expert Home Care,<br>One Tap Away.</h1>
+            <div class="hero-buttons">
+                <a href="#" class="btn btn-primary">Book Now</a>
+                <a href="#" class="btn btn-secondary">Learn More</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="services">
+        <div class="section-header">
+            <h2>Our Core Services</h2>
+            <p>Comprehensive solutions for your home</p>
+        </div>
+        <div class="service-grid">
+            <div class="service-card">
+                <img src="PLUMBER.jpg" alt="Plumbing">
+                <div class="card-content">
+                    <h3>Master Plumbing</h3>
+                    <div style="display:flex; justify-content:space-between; margin: 10px 0;">
+                        <span style="color:#10b981; font-weight:bold;">⭐ 4.8</span><span style="font-weight:bold;">From $49</span>
+                    </div>
+                    <a href="#" class="btn-view">View Details</a>
+                </div>
+            </div>
+            <div class="service-card">
+                <img src="ELECT.jpg" alt="Electrical">
+                <div class="card-content">
+                    <h3>Electrical Experts</h3>
+                    <div style="display:flex; justify-content:space-between; margin: 10px 0;">
+                        <span style="color:#10b981; font-weight:bold;">⭐ 4.9</span><span style="font-weight:bold;">From $59</span>
+                    </div>
+                    <a href="#" class="btn-view">View Details</a>
+                </div>
+            </div>
+            <div class="service-card">
+                <img src="CLEAN.jpg" alt="Cleaning">
+                <div class="card-content">
+                    <h3>Deep Cleaning</h3>
+                    <div style="display:flex; justify-content:space-between; margin: 10px 0;">
+                        <span style="color:#10b981; font-weight:bold;">⭐ 4.7</span><span style="font-weight:bold;">From $79</span>
+                    </div>
+                    <a href="#" class="btn-view">View Details</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="most-booked">
+        <div class="section-header">
+            <h2>Most Booked Services</h2>
+            <p>Trending services chosen by our users</p>
+        </div>
+        
+        <div class="horizontal-scroll">
+            <div class="mini-card">
+                <div class="mini-img-placeholder">❄️</div>
+                <div class="mini-rating">⭐ 4.82 (124K)</div>
+                <h4>AC Filter Cleaning</h4>
+                <div class="price-row">
+                    <span class="price">$29</span>
+                    <button class="add-btn" data-name="AC Filter Cleaning" data-price="29">Add</button>
+                </div>
+            </div>
+
+            <div class="mini-card">
+                <div class="mini-img-placeholder">🛋️</div>
+                <div class="mini-rating">⭐ 4.75 (89K)</div>
+                <h4>Sofa Shampooing</h4>
+                <div class="price-row">
+                    <span class="price">$45</span>
+                    <button class="add-btn" data-name="Sofa Shampooing" data-price="45">Add</button>
+                </div>
+            </div>
+
+            <div class="mini-card">
+                <div class="mini-img-placeholder">🚿</div>
+                <div class="mini-rating">⭐ 4.88 (210K)</div>
+                <h4>Bathroom Deep Clean</h4>
+                <div class="price-row">
+                    <span class="price">$35</span>
+                    <button class="add-btn" data-name="Bathroom Deep Clean" data-price="35">Add</button>
+                </div>
+            </div>
+
+            <div class="mini-card">
+                <div class="mini-img-placeholder">🪛</div>
+                <div class="mini-rating">⭐ 4.90 (45K)</div>
+                <h4>Drill & Hang (Frames)</h4>
+                <div class="price-row">
+                    <span class="price">$19</span>
+                    <button class="add-btn" data-name="Drill & Hang" data-price="19">Add</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="why-choose-us">
+        <div class="section-header">
+            <h2>Why Choose URBANease?</h2>
+        </div>
+        <div class="why-grid">
+            <div class="why-item">
+                <span>🛡️</span>
+                <h3>Verified Pros</h3>
+                <p>Every professional undergoes a background verification.</p>
+            </div>
+            <div class="why-item">
+                <span>💳</span>
+                <h3>Upfront Pricing</h3>
+                <p>No hidden surprises. You see the cost before you book.</p>
+            </div>
+            <div class="why-item">
+                <span>✨</span>
+                <h3>Quality Guarantee</h3>
+                <p>If you aren't satisfied, we'll make it right or refund you.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works">
+        <div class="section-header">
+            <h2>How It Works</h2>
+        </div>
+        <div class="how-grid">
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <h3>Choose a Service</h3>
+                <p>Select from our wide range of professional home services.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <h3>Pick a Time</h3>
+                <p>Choose a convenient date and time slot that works for you.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <h3>Relax & Enjoy</h3>
+                <p>Our verified professional arrives on time and completes the job.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="cart-overlay" id="cart-overlay"></div>
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>Your Cart</h3>
+            <button class="close-cart" id="close-cart-btn">&times;</button>
+        </div>
+        
+        <div class="cart-items-container" id="cart-items-container">
+            <p class="cart-empty">Your cart is currently empty.</p>
+        </div>
+
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span>$<span id="cart-total-price">0</span></span>
+            </div>
+            <button class="btn btn-primary" style="width: 100%; text-align: center;">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <div class="auth-modal-overlay" id="login-modal-overlay">
+        <div class="auth-modal">
+            <button class="close-modal-btn" id="close-login-btn">&times;</button>
+            <h2 class="modal-title">Welcome Back</h2>
+            <p class="modal-subtitle">Log in to book and manage your services.</p>
+            
+            <form>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" placeholder="Enter your password" required>
+                </div>
+                <a href="#" class="forgot-password">Forgot Password?</a>
+                
+                <button type="submit" class="auth-submit-btn">Log In</button>
+            </form>
+            
+            <div class="auth-switch">
+                Don't have an account? <a id="switch-to-signup">Sign up here</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="auth-modal-overlay" id="signup-modal-overlay">
+        <div class="auth-modal">
+            <button class="close-modal-btn" id="close-signup-btn">&times;</button>
+            <h2 class="modal-title">Create an Account</h2>
+            <p class="modal-subtitle">Join URBANease and get your home sorted.</p>
+            
+            <form>
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" placeholder="e.g. John Doe" required>
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" placeholder="e.g. john@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" placeholder="Create a strong password" required>
+                </div>
+                
+                <button type="submit" class="auth-submit-btn">Create Account</button>
+            </form>
+            
+            <div class="auth-switch">
+                Already have an account? <a id="switch-to-login">Log in here</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <div class="logo">URBAN<span>ease</span></div>
+                <p style="margin-top: 15px;">Simplifying urban living.</p>
+            </div>
+            <div class="footer-col">
+                <h4 style="margin-bottom: 15px; color: white;">Quick Links</h4>
+                <ul style="line-height: 2;">
+                    <li><a href="#">Join as Pro</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">FAQs</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4 style="margin-bottom: 15px; color: white;">Contact</h4>
+                <ul style="line-height: 2;">
+                    <li>📍 New Delhi, India</li>
+                    <li>📞 +91 98765 43210</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 URBANease. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- Navbar Scroll Effect ---
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // --- Cart Logic ---
+        let cart = [];
+        const cartSidebar = document.getElementById('cart-sidebar');
+        const cartOverlay = document.getElementById('cart-overlay');
+        const openCartBtn = document.getElementById('open-cart-btn');
+        const closeCartBtn = document.getElementById('close-cart-btn');
+        const cartItemsContainer = document.getElementById('cart-items-container');
+        const cartBadge = document.getElementById('cart-badge');
+        const cartTotalPrice = document.getElementById('cart-total-price');
+
+        function openCart() {
+            cartSidebar.classList.add('active');
+            cartOverlay.classList.add('active');
+        }
+
+        function closeCart() {
+            cartSidebar.classList.remove('active');
+            cartOverlay.classList.remove('active');
+        }
+
+        openCartBtn.addEventListener('click', openCart);
+        closeCartBtn.addEventListener('click', closeCart);
+        cartOverlay.addEventListener('click', closeCart);
+
+        document.querySelectorAll('.add-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const name = this.getAttribute('data-name');
+                const price = parseFloat(this.getAttribute('data-price'));
+
+                cart.push({ name, price });
+                
+                const originalText = this.innerText;
+                this.innerText = 'Added!';
+                setTimeout(() => this.innerText = originalText, 1000);
+
+                updateCartUI();
+                openCart();
+            });
+        });
+
+        function updateCartUI() {
+            cartBadge.innerText = cart.length;
+            cartItemsContainer.innerHTML = '';
+            let total = 0;
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<p class="cart-empty">Your cart is currently empty.</p>';
+            } else {
+                cart.forEach((item, index) => {
+                    total += item.price;
+                    const itemDiv = document.createElement('div');
+                    itemDiv.classList.add('cart-item');
+                    itemDiv.innerHTML = `
+                        <div class="cart-item-info">
+                            <h4>${item.name}</h4>
+                            <span class="cart-item-price">$${item.price}</span>
+                        </div>
+                        <button class="remove-btn" onclick="removeFromCart(${index})">Remove</button>
+                    `;
+                    cartItemsContainer.appendChild(itemDiv);
+                });
+            }
+            cartTotalPrice.innerText = total.toFixed(2);
+        }
+
+        window.removeFromCart = function(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        // --- Modal Auth Logic ---
+        const loginModal = document.getElementById('login-modal-overlay');
+        const signupModal = document.getElementById('signup-modal-overlay');
+        
+        // Buttons to open modals
+        const navLoginBtn = document.getElementById('nav-login-btn');
+        const navSignupBtn = document.getElementById('nav-signup-btn');
+        
+        // Buttons to close modals
+        const closeLoginBtn = document.getElementById('close-login-btn');
+        const closeSignupBtn = document.getElementById('close-signup-btn');
+
+        // Switch Links
+        const switchToSignup = document.getElementById('switch-to-signup');
+        const switchToLogin = document.getElementById('switch-to-login');
+
+        // Functions
+        function openLogin() {
+            signupModal.classList.remove('active');
+            loginModal.classList.add('active');
+        }
+
+        function openSignup() {
+            loginModal.classList.remove('active');
+            signupModal.classList.add('active');
+        }
+
+        function closeModals() {
+            loginModal.classList.remove('active');
+            signupModal.classList.remove('active');
+        }
+
+        // Event Listeners
+        navLoginBtn.addEventListener('click', openLogin);
+        navSignupBtn.addEventListener('click', openSignup);
+        closeLoginBtn.addEventListener('click', closeModals);
+        closeSignupBtn.addEventListener('click', closeModals);
+        
+        // Switch between modals
+        switchToSignup.addEventListener('click', openSignup);
+        switchToLogin.addEventListener('click', openLogin);
+
+        // Close when clicking outside the modal box
+        loginModal.addEventListener('click', (e) => {
+            if(e.target === loginModal) closeModals();
+        });
+        signupModal.addEventListener('click', (e) => {
+            if(e.target === signupModal) closeModals();
+        });
+
+    </script>
+</body>
+</html>
